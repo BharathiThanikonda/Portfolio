@@ -36,15 +36,14 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-20 bg-background">
+    <section id="skills" className="py-20 bg-surface-variant">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Technical Skills
+            Skills
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            A comprehensive toolkit spanning AI technologies, software development, 
-            and modern cloud platforms for building scalable solutions.
+            Technical expertise spanning AI technologies, software development, and modern platforms
           </p>
         </div>
 
@@ -75,27 +74,6 @@ const Skills = () => {
               </CardContent>
             </Card>
           ))}
-        </div>
-
-        {/* Additional highlight section */}
-        <div className="mt-16 text-center">
-          <div className="bg-card-gradient border border-border rounded-2xl p-8 max-w-4xl mx-auto shadow-medium">
-            <h3 className="font-heading text-2xl font-semibold text-foreground mb-4">
-              Core Expertise
-            </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              Specializing in the intersection of artificial intelligence and software engineering, 
-              with deep experience in building and deploying large language models, creating intelligent 
-              chatbot systems, and developing end-to-end web applications that scale.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              {["AI/ML Engineering", "Full-Stack Development", "System Architecture", "Cloud Computing"].map((expertise, index) => (
-                <Badge key={index} className="bg-primary text-primary-foreground px-4 py-2 text-sm">
-                  {expertise}
-                </Badge>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>

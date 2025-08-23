@@ -44,15 +44,14 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-20 bg-surface-variant">
+    <section id="projects" className="py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Featured Projects
+            Projects
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            A showcase of innovative AI and software development projects that demonstrate 
-            my expertise in building scalable, intelligent solutions.
+            Featured work showcasing expertise in AI, machine learning, and full-stack development
           </p>
         </div>
 
@@ -69,29 +68,13 @@ const Projects = () => {
               </CardHeader>
               
               <CardContent className="space-y-6">
-                {/* Key Features */}
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-3">Key Features:</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    {project.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
                 {/* Technologies */}
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground mb-3">Technologies:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech, techIndex) => (
+                    <Badge key={techIndex} variant="secondary" className="text-xs">
+                      {tech}
+                    </Badge>
+                  ))}
                 </div>
 
                 {/* Links */}
@@ -103,7 +86,7 @@ const Projects = () => {
                     onClick={() => window.open(project.githubUrl, '_blank')}
                   >
                     <Github className="w-4 h-4 mr-2" />
-                    Code
+                    View Code
                   </Button>
                 </div>
               </CardContent>
@@ -117,7 +100,7 @@ const Projects = () => {
             className="group"
             onClick={() => window.open('https://github.com/BharathiThanikonda', '_blank')}
           >
-            <span>View All Projects on GitHub</span>
+            <span>View All Projects</span>
             <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>

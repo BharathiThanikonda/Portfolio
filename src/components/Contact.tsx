@@ -43,15 +43,14 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-surface-variant">
+    <section id="contact" className="py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Let's Connect
+            Contact
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            I'm always interested in discussing new opportunities, collaborations, 
-            or innovative AI and software development projects.
+            Let's discuss opportunities, collaborations, or innovative projects
           </p>
         </div>
 
@@ -102,7 +101,7 @@ const Contact = () => {
             {/* Social Links & CTA */}
             <div className="space-y-8">
               <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                Professional Links
+                Connect
               </h3>
               
               {/* Social Media Links */}
@@ -126,7 +125,7 @@ const Contact = () => {
                               {social.label}
                             </h4>
                             <p className="text-muted-foreground text-sm">
-                              View my professional profile
+                              Professional profile
                             </p>
                           </div>
                         </a>
@@ -137,14 +136,12 @@ const Contact = () => {
               </div>
 
               {/* Call to Action */}
-              <div className="bg-card-gradient border border-border rounded-2xl p-8 shadow-medium text-center">
+              <div className="bg-card border border-border rounded-2xl p-8 shadow-medium text-center">
                 <h4 className="font-heading text-xl font-semibold text-foreground mb-4">
                   Ready to Collaborate?
                 </h4>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Whether you're looking for an AI engineer, software developer, 
-                  or someone passionate about innovative technology solutions, 
-                  I'd love to hear from you.
+                  Let's discuss AI projects, software development opportunities, or innovative technology solutions.
                 </p>
                 <Button 
                   size="lg"
