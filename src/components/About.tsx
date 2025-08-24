@@ -1,115 +1,180 @@
-const About = () => {
-  const experiences = [
-    {
-      role: "AI Engineer (Graduate Assistant)",
-      company: "Texas Tech University",
-      period: "May 2025 - Present",
-      current: true
-    },
-    {
-      role: "Senior Software Engineer",
-      company: "HCL Software",
-      period: "Aug 2023 - July 2024",
-      current: false
-    },
-    {
-      role: "System Development Engineer Intern",
-      company: "Amazon",
-      period: "Jan 2023 - June 2023",
-      current: false
-    }
-  ];
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
+const About = () => {
+  const { ref, isVisible } = useScrollAnimation();
+  
   const education = [
     {
       degree: "M.S. in Computer Science",
       institution: "Texas Tech University",
-      current: true
+      current: true,
+      gpa: "3.9/4.0",
+      focus: "Artificial Intelligence & Machine Learning"
     },
     {
-      degree: "B.Tech in Computer Science and Engineering",
+      degree: "B.Tech in Computer Science",
       institution: "R.V.R & J.C College of Engineering",
-      current: false
+      current: false,
+      gpa: "9.61 CGPA",
+      focus: "Software Engineering & Web Development"
+    }
+  ];
+
+  const skills = [
+    { 
+      category: "Programming Languages", 
+      items: ["Python", "Java", "JavaScript", "TypeScript", "C++", "HTML/CSS"] 
+    },
+    { 
+      category: "AI & Machine Learning", 
+      items: [
+        "PyTorch", 
+        "TensorFlow", 
+        "LangChain", 
+        "RAG", 
+        "OpenAI", 
+        "Scikit-learn", 
+        "Ollama", 
+        "Deep Learning", 
+        "Natural Language Processing (NLP)", 
+        "Large Language Models (LLMs)"
+      ] 
+    },
+    { 
+      category: "Web Development", 
+      items: [
+        "React", 
+        "FastAPI", 
+        "Node.js", 
+        "Express.js", 
+        "Flask",
+        "Socket.IO", 
+        "WebSocket"
+      ] 
+    },
+    { 
+      category: "Database Technologies", 
+      items: ["PostgreSQL", "MongoDB", "MySQL", "SQLite", "MSSQL", "ChromaDB"] 
+    },
+    { 
+      category: "Cloud & DevOps", 
+      items: ["AWS", "Docker", "Git", "GitHub", "CI/CD"] 
+    },
+    { 
+      category: "Data Analysis", 
+      items: ["Pandas", "NumPy", "Matplotlib", "Seaborn", "Data Analysis", "Power BI", "QuickSight", "Data Visualization"] 
+    },
+    { 
+      category: "Software Engineering", 
+      items: ["System Design", "Object-Oriented Programming", "Design Patterns", "Agile", "Code Review", "Testing", "Git/GitHub", "Performance Optimization", "REST APIs"] 
     }
   ];
 
   return (
-    <section id="about" className="py-20 bg-surface-variant">
-      <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto">
+    <section id="about" className="py-20 bg-surface-variant relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5"></div>
+      <div className="absolute top-1/4 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-float"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div 
+          ref={ref}
+          className={`max-w-6xl mx-auto transition-all duration-1000 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <div className="text-center mb-16">
-            <h2 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              About Me
+            <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
+              <span className="gradient-text">About Me</span>
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Passionate about creating innovative solutions that bridge AI and full-stack development
+            <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Crafting the future where artificial intelligence meets human ingenuity, one innovative solution at a time
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Who Am I */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="text-2xl">👤</div>
-                <h3 className="font-heading text-2xl font-semibold text-foreground">Who Am I</h3>
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Main Content */}
+            <div className="lg:col-span-2 animate-fade-in-left" style={{ animationDelay: '0.4s' }}>
+              {/* Who I Am */}
+              <div className="glass rounded-2xl p-8 hover-lift mb-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="text-2xl">🚀</div>
+                  <h3 className="font-heading text-2xl font-semibold text-foreground">Who I Am</h3>
+                </div>
+                <div className="space-y-4 text-muted-foreground leading-relaxed">
+                  <p>
+                    I'm <strong className="text-foreground">Bharathi Thanikonda</strong>, a passionate AI engineer and software developer 
+                    who believes in the transformative power of technology. My journey began with a fascination 
+                    for how machines can understand and interact with humans, leading me to specialize in 
+                    Large Language Models and AI-powered applications.
+                  </p>
+                  <p>
+                    Currently pursuing my Master's in Computer Science at Texas Tech University, I'm deeply 
+                    involved in research that pushes the boundaries of what's possible with AI. My experience 
+                    spans from building enterprise-level software at HCL to contributing to Amazon's 
+                    infrastructure, giving me a unique perspective on both the theoretical and practical 
+                    aspects of technology.
+                  </p>
+                  <p>
+                    I thrive on solving complex problems and turning innovative ideas into reality. Whether 
+                    it's developing intelligent chatbots that understand context, architecting scalable 
+                    web applications, or exploring the latest advancements in machine learning, I'm 
+                    constantly learning and evolving with the technology landscape.
+                  </p>
+                </div>
               </div>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  I'm <strong className="text-foreground">Bharathi Thanikonda</strong>, an AI Engineer with expertise in building and hosting LLMs,
-                  AI-powered chatbots, and scalable web applications. Currently pursuing my Master's in Computer Science
-                  at Texas Tech University.
-                </p>
-                <p>
-                  My experience spans working with cutting-edge AI technologies, developing production-grade applications,
-                  and implementing end-to-end solutions that solve real-world problems through innovative technology.
-                </p>
-              </div>
-            </div>
 
-            {/* Experience Timeline */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="text-2xl">💼</div>
-                <h3 className="font-heading text-2xl font-semibold text-foreground">Experience</h3>
-              </div>
-              <div className="space-y-6">
-                {experiences.map((exp, index) => (
-                  <div key={index} className="border-l-2 border-primary pl-6 pb-6 last:pb-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-primary rounded-full -ml-8"></div>
-                      <span className="text-sm text-muted-foreground">{exp.period}</span>
-                      {exp.current && (
-                        <span className="bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium ml-2">
+              {/* Education */}
+              <div className="glass rounded-2xl p-8 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="text-2xl">🎓</div>
+                  <h3 className="font-heading text-2xl font-semibold text-foreground">Education</h3>
+                </div>
+                <div className="space-y-6">
+                  {education.map((edu, index) => (
+                    <div key={index} className="border-l-2 border-primary pl-6">
+                      <h4 className="font-semibold text-foreground mb-2 text-lg">{edu.degree}</h4>
+                      <p className="text-muted-foreground mb-2">{edu.institution}</p>
+                      <p className="text-primary font-medium mb-2">{edu.focus}</p>
+                      <p className="text-muted-foreground text-sm mb-3">GPA: {edu.gpa}</p>
+                      {edu.current && (
+                        <span className="inline-block gradient-bg text-white px-3 py-1 rounded-full text-xs font-medium">
                           Current
                         </span>
                       )}
                     </div>
-                    <h4 className="font-semibold text-foreground mb-1">{exp.role}</h4>
-                    <p className="text-muted-foreground text-sm">{exp.company}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Education */}
-          <div className="mt-16 text-center">
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="text-2xl">🎓</div>
-              <h3 className="font-heading text-2xl font-semibold text-foreground">Education</h3>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {education.map((edu, index) => (
-                <div key={index} className="bg-card border border-border rounded-lg p-6 shadow-soft">
-                  <h4 className="font-semibold text-foreground mb-2">{edu.degree}</h4>
-                  <p className="text-muted-foreground">{edu.institution}</p>
-                  {edu.current && (
-                    <span className="inline-block bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium mt-2">
-                      Current
-                    </span>
-                  )}
+            {/* Sidebar */}
+            <div className="animate-fade-in-right" style={{ animationDelay: '0.6s' }}>
+              {/* Core Skills */}
+              <div className="glass rounded-2xl p-6 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="text-2xl">⚡</div>
+                  <h3 className="font-heading text-xl font-semibold text-foreground">Core Expertise</h3>
                 </div>
-              ))}
+                <div className="space-y-4">
+                  {skills.map((skillGroup, index) => (
+                    <div key={index}>
+                      <h4 className="font-semibold text-foreground mb-2 text-sm">{skillGroup.category}</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {skillGroup.items.map((skill, skillIndex) => (
+                          <span 
+                            key={skillIndex}
+                            className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full border border-primary/20 hover:bg-primary/20 transition-colors"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

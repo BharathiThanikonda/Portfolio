@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, Linkedin, Github, MapPin } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const Contact = () => {
+  const { ref, isVisible } = useScrollAnimation();
+  
   const contactInfo = [
     {
       icon: Mail,
@@ -43,114 +46,126 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-background">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Contact
-          </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            Let's discuss opportunities, collaborations, or innovative projects
-          </p>
-        </div>
+    <section id="contact" className="py-20 bg-background relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5"></div>
+      <div className="absolute top-1/3 right-10 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-1/3 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div 
+          ref={ref}
+          className={`transition-all duration-1000 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
+        >
+          <div className="text-center mb-16">
+            <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
+              <span className="gradient-text">Contact</span>
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Let's discuss opportunities, collaborations, or innovative projects
+            </p>
+          </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Contact Information */}
-            <div className="space-y-6">
-              <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                Get in Touch
-              </h3>
-              
-              <div className="space-y-4">
-                {contactInfo.map((contact, index) => {
-                  const IconComponent = contact.icon;
-                  const content = (
-                    <Card className={`bg-card border-border shadow-soft hover:shadow-medium transition-all duration-300 ${contact.href ? 'hover:border-primary cursor-pointer group' : ''}`}>
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-4">
-                          <div className={`p-3 rounded-lg ${contact.primary ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
-                            <IconComponent className="w-5 h-5" />
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Contact Information */}
+              <div className="space-y-6 animate-fade-in-left" style={{ animationDelay: '0.4s' }}>
+                <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
+                  Get in Touch
+                </h3>
+                
+                <div className="space-y-4">
+                  {contactInfo.map((contact, index) => {
+                    const IconComponent = contact.icon;
+                    const content = (
+                      <Card className={`glass rounded-2xl border-primary/20 shadow-medium hover-lift ${contact.href ? 'hover:border-primary cursor-pointer group' : ''}`}>
+                        <CardContent className="p-6">
+                          <div className="flex items-center space-x-4">
+                            <div className={`p-3 rounded-xl ${contact.primary ? 'gradient-bg text-white' : 'bg-primary/10 text-primary'}`}>
+                              <IconComponent className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-foreground mb-1">
+                                {contact.label}
+                              </h4>
+                              <p className={`text-muted-foreground ${contact.href ? 'group-hover:text-primary transition-colors' : ''}`}>
+                                {contact.value}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-1">
-                              {contact.label}
-                            </h4>
-                            <p className={`text-muted-foreground ${contact.href ? 'group-hover:text-primary transition-colors' : ''}`}>
-                              {contact.value}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
+                        </CardContent>
+                      </Card>
+                    );
 
-                  return contact.href ? (
-                    <a key={index} href={contact.href} className="block">
-                      {content}
-                    </a>
-                  ) : (
-                    <div key={index}>
-                      {content}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Social Links & CTA */}
-            <div className="space-y-8">
-              <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
-                Connect
-              </h3>
-              
-              {/* Social Media Links */}
-              <div className="space-y-4">
-                {socialLinks.map((social, index) => {
-                  const IconComponent = social.icon;
-                  return (
-                    <Card key={index} className="bg-card border-border shadow-soft hover:shadow-medium transition-all duration-300 hover:border-primary cursor-pointer group">
-                      <CardContent className="p-6">
-                        <a 
-                          href={social.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-4"
-                        >
-                          <div className="p-3 rounded-lg bg-secondary text-secondary-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                            <IconComponent className="w-5 h-5" />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                              {social.label}
-                            </h4>
-                            <p className="text-muted-foreground text-sm">
-                              Professional profile
-                            </p>
-                          </div>
-                        </a>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
+                    return contact.href ? (
+                      <a key={index} href={contact.href} className="block">
+                        {content}
+                      </a>
+                    ) : (
+                      <div key={index}>
+                        {content}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Call to Action */}
-              <div className="bg-card border border-border rounded-2xl p-8 shadow-medium text-center">
-                <h4 className="font-heading text-xl font-semibold text-foreground mb-4">
-                  Ready to Collaborate?
-                </h4>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Let's discuss AI projects, software development opportunities, or innovative technology solutions.
-                </p>
-                <Button 
-                  size="lg"
-                  className="bg-primary hover:bg-primary-hover text-primary-foreground shadow-medium"
-                  onClick={() => window.open('mailto:bharathithanikonda173@gmail.com', '_blank')}
-                >
-                  <Mail className="w-5 h-5 mr-2" />
-                  Send Email
-                </Button>
+              {/* Social Links & CTA */}
+              <div className="space-y-8 animate-fade-in-right" style={{ animationDelay: '0.6s' }}>
+                <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
+                  Connect
+                </h3>
+                
+                {/* Social Media Links */}
+                <div className="space-y-4">
+                  {socialLinks.map((social, index) => {
+                    const IconComponent = social.icon;
+                    return (
+                      <Card key={index} className="glass rounded-2xl border-primary/20 shadow-medium hover-lift cursor-pointer group">
+                        <CardContent className="p-6">
+                          <a 
+                            href={social.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center space-x-4"
+                          >
+                            <div className="p-3 rounded-xl bg-primary/10 text-primary group-hover:gradient-bg group-hover:text-white transition-all duration-300">
+                              <IconComponent className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                                {social.label}
+                              </h4>
+                              <p className="text-muted-foreground text-sm">
+                                Professional profile
+                              </p>
+                            </div>
+                          </a>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+
+                {/* Call to Action */}
+                <div className="glass rounded-2xl p-8 shadow-medium text-center hover-lift animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+                  <h4 className="font-heading text-xl font-semibold text-foreground mb-4">
+                    Ready to Collaborate?
+                  </h4>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Let's discuss AI projects, software development opportunities, or innovative technology solutions.
+                  </p>
+                  <Button 
+                    size="lg"
+                    className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white shadow-medium px-8 py-3 rounded-xl"
+                    onClick={() => window.open('mailto:bharathithanikonda173@gmail.com', '_blank')}
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    Send Email
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
