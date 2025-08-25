@@ -19,8 +19,8 @@ const Hero = () => {
     <section id="home" className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
       {/* Background gradient effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+      
+
       
       <div className="container mx-auto px-6 relative z-10">
         <div 
@@ -31,12 +31,12 @@ const Hero = () => {
         >
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="mb-8 animate-fade-in-up">
+            <div className="mb-8">
               <h2 className="text-2xl lg:text-3xl text-muted-foreground mb-2 animate-fade-in-up">
                 Hi, I'm
               </h2>
-              <h1 className="font-heading text-5xl lg:text-6xl font-bold mb-2 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                <span className="gradient-text">Bharathi Thanikonda</span>
+              <h1 className="font-heading text-5xl lg:text-6xl font-bold mb-2">
+                <span className="gradient-text animate-text-slide-in" style={{ animationDelay: '0.3s' }}>Bharathi Thanikonda</span>
               </h1>
             </div>
             

@@ -1,4 +1,14 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import ollamaImage from "@/assets/ollama.png";
+import langchainImage from "@/assets/langchain.png";
+import openaiImage from "@/assets/OpenAI.png";
+import flaskImage from "@/assets/flask.png";
+import powerbiImage from "@/assets/PowerBI.png";
+import quicksightImage from "@/assets/QuickSight.png";
+import seabornImage from "@/assets/seaborn.png";
+import chromadbImage from "@/assets/ChromaDB.png";
+import awsImage from "@/assets/aws.png";
+import expressjsImage from "@/assets/ExpressJS.png";
 
 const Skills = () => {
   const { ref, isVisible } = useScrollAnimation();
@@ -14,9 +24,9 @@ const Skills = () => {
     "AI & Machine Learning": [
       { name: "PyTorch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg", expertise: "Advanced" },
       { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg", expertise: "Advanced" },
-      { name: "LangChain", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/langchain.svg", expertise: "Advanced" },
-      { name: "OpenAI", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg", expertise: "Advanced" },
-      { name: "Ollama", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/ollama.svg", expertise: "Intermediate" }
+      { name: "LangChain", icon: langchainImage, expertise: "Advanced" },
+      { name: "OpenAI", icon: openaiImage, expertise: "Advanced" },
+      { name: "Ollama", icon: ollamaImage, expertise: "Intermediate" }
     ],
     "Web Development": [
       { name: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg", expertise: "Advanced" },
@@ -24,8 +34,8 @@ const Skills = () => {
       { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", expertise: "Advanced" },
       { name: "FastAPI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg", expertise: "Advanced" },
       { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", expertise: "Advanced" },
-      { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", expertise: "Advanced" },
-      { name: "Flask", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg", expertise: "Intermediate" }
+      { name: "Express.js", icon: expressjsImage, expertise: "Advanced" },
+      { name: "Flask", icon: flaskImage, expertise: "Intermediate" }
     ],
     "Database Technologies": [
       { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", expertise: "Advanced" },
@@ -33,10 +43,10 @@ const Skills = () => {
       { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg", expertise: "Intermediate" },
       { name: "SQLite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg", expertise: "Intermediate" },
       { name: "MSSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-original.svg", expertise: "Intermediate" },
-      { name: "ChromaDB", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/embedding.svg", expertise: "Intermediate" }
+      { name: "ChromaDB", icon: chromadbImage, expertise: "Intermediate" }
     ],
     "Cloud & DevOps": [
-      { name: "AWS", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/amazonaws.svg", expertise: "Advanced" },
+      { name: "AWS", icon: awsImage, expertise: "Advanced" },
       { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", expertise: "Intermediate" },
       { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", expertise: "Expert" },
       { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", expertise: "Expert" },
@@ -46,9 +56,9 @@ const Skills = () => {
       { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg", expertise: "Advanced" },
       { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg", expertise: "Advanced" },
       { name: "Matplotlib", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg", expertise: "Advanced" },
-      { name: "Seaborn", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/chart-bar.svg", expertise: "Intermediate" },
-      { name: "Power BI", icon: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/powerbi.svg", expertise: "Intermediate" },
-      { name: "QuickSight", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg", expertise: "Intermediate" }
+      { name: "Seaborn", icon: seabornImage, expertise: "Intermediate" },
+      { name: "Power BI", icon: powerbiImage, expertise: "Intermediate" },
+      { name: "QuickSight", icon: quicksightImage, expertise: "Intermediate" }
     ]
   };
 
@@ -67,7 +77,7 @@ const Skills = () => {
         >
           <div className="text-center mb-12">
             <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
-              <span className="gradient-text">Skills & Expertise</span>
+              <span className="gradient-text animate-heading-glow">Skills & Expertise</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Technologies and tools I use to bring ideas to life

@@ -225,6 +225,112 @@ All colors MUST be HSL.
   }
 }
 
+@keyframes textSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes headingGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes neuralPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes codeStream {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
+  }
+}
+
+@keyframes aiPulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: scale(1.1) rotate(90deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.9;
+  }
+  75% {
+    transform: scale(1.1) rotate(270deg);
+    opacity: 1;
+  }
+}
+
+@keyframes networkFlow {
+  0% {
+    transform: translateX(-100%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes globeRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
 /* Animation classes */
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out;
@@ -238,6 +344,18 @@ All colors MUST be HSL.
   animation: fadeInRight 0.6s ease-out;
 }
 
+.animate-ai-pulse {
+  animation: aiPulse 4s ease-in-out infinite;
+}
+
+.animate-network-flow {
+  animation: networkFlow 6s ease-in-out infinite;
+}
+
+.animate-globe-rotate {
+  animation: globeRotate 30s linear infinite;
+}
+
 .animate-scale-in {
   animation: scaleIn 0.6s ease-out;
 }
@@ -248,6 +366,26 @@ All colors MUST be HSL.
 
 .animate-glow {
   animation: glow 2s ease-in-out infinite;
+}
+
+.animate-text-slide-in {
+  animation: textSlideIn 0.8s ease-out forwards;
+}
+
+.animate-heading-glow {
+  animation: headingGlow 2s ease-in-out infinite;
+}
+
+.animate-data-flow {
+  animation: dataFlow 8s ease-in-out infinite;
+}
+
+.animate-neural-pulse {
+  animation: neuralPulse 3s ease-in-out infinite;
+}
+
+.animate-code-stream {
+  animation: codeStream 12s ease-in-out infinite;
 }
 
 /* Gradient text */

@@ -85,7 +85,7 @@ const About = () => {
         >
           <div className="text-center mb-16">
             <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
-              <span className="gradient-text">About Me</span>
+              <span className="gradient-text animate-heading-glow">About Me</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Crafting the future where artificial intelligence meets human ingenuity, one innovative solution at a time
@@ -99,7 +99,7 @@ const About = () => {
               {/* Who I Am */}
               <div className="glass rounded-2xl p-8 hover-lift mb-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="text-2xl">🚀</div>
+                  <div className="text-3xl">👤</div>
                   <h3 className="font-heading text-2xl font-semibold text-foreground">Who I Am</h3>
                 </div>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -107,20 +107,22 @@ const About = () => {
                     I'm <strong className="text-foreground">Bharathi Thanikonda</strong>, a passionate AI engineer and software developer 
                     who believes in the transformative power of technology. My journey began with a fascination 
                     for how machines can understand and interact with humans, leading me to specialize in 
-                    Large Language Models and AI-powered applications.
+                    Large Language Models and AI-powered applications. I thrive on solving complex problems 
+                    and turning innovative ideas into reality, whether it's developing intelligent chatbots 
+                    with LangChain and OpenAI, building scalable web applications using React, FastAPI, and 
+                    Node.js, or implementing machine learning pipelines with PyTorch, TensorFlow, and 
+                    scikit-learn for data analysis and predictive modeling.
                   </p>
+                  
                   <p>
                     Currently pursuing my Master's in Computer Science at Texas Tech University, I'm deeply 
                     involved in research that pushes the boundaries of what's possible with AI. My experience 
                     spans from building enterprise-level software at HCL to contributing to Amazon's 
                     infrastructure, giving me a unique perspective on both the theoretical and practical 
-                    aspects of technology.
-                  </p>
-                  <p>
-                    I thrive on solving complex problems and turning innovative ideas into reality. Whether 
-                    it's developing intelligent chatbots that understand context, architecting scalable 
-                    web applications, or exploring the latest advancements in machine learning, I'm 
-                    constantly learning and evolving with the technology landscape.
+                    aspects of technology. I'm constantly learning and evolving with the technology landscape, 
+                    combining my expertise in cloud platforms like AWS, database technologies including 
+                    PostgreSQL and MongoDB, DevOps practices with Docker and Git, and data visualization 
+                    tools like Power BI and QuickSight to create innovative solutions that make a real impact.
                   </p>
                 </div>
               </div>

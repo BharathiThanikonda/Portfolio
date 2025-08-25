@@ -163,7 +163,7 @@ const Experience = () => {
         >
           <div className="text-center mb-16">
             <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
-              <span className="gradient-text">Professional Experience</span>
+              <span className="gradient-text animate-heading-glow">Professional Experience</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               My journey through the world of technology, from internships to leading AI research
@@ -188,31 +188,7 @@ const Experience = () => {
               ))}
             </div>
 
-            {/* End of Timeline */}
-            <div className={`relative mt-16 transition-all duration-1000 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`} style={{ transitionDelay: '0.8s' }}>
-              {/* End Dot - Desktop */}
-              <div className={`absolute left-1/2 top-0 w-4 h-4 bg-primary rounded-full border-4 border-background shadow-lg transform -translate-x-1/2 hidden lg:block transition-all duration-700 ${
-                isVisible ? 'scale-100 opacity-100 animate-glow' : 'scale-0 opacity-0'
-              }`} style={{ transitionDelay: '1s' }}></div>
-              
-              {/* End Dot - Mobile */}
-              <div className={`absolute left-6 top-0 w-4 h-4 bg-primary rounded-full border-4 border-background shadow-lg lg:hidden transition-all duration-700 ${
-                isVisible ? 'scale-100 opacity-100 animate-glow' : 'scale-0 opacity-0'
-              }`} style={{ transitionDelay: '1s' }}></div>
-              
-              <div className="text-center">
-                <div className="glass rounded-2xl p-6 max-w-md mx-auto border border-primary/10 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:scale-105">
-                  <h3 className="font-heading text-lg font-semibold text-foreground mb-2">
-                    Ready for the Next Chapter
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Always open to new opportunities and exciting challenges
-                  </p>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

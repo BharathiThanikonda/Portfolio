@@ -87,14 +87,6 @@ const Navigation = () => {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
-            <Button 
-              size="sm"
-              variant="outline"
-              className="border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300 rounded-xl"
-              onClick={() => scrollToSection('contact')}
-            >
-              Contact
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -132,15 +124,7 @@ const Navigation = () => {
                   </button>
                 );
               })}
-              <div className="pt-4 border-t border-primary/20">
-                <Button 
-                  className="w-full border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300 rounded-xl"
-                  variant="outline"
-                  onClick={() => scrollToSection('contact')}
-                >
-                  Contact
-                </Button>
-              </div>
+
             </div>
           </div>
         )}

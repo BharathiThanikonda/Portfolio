@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, Phone, Linkedin, Github, MapPin } from "lucide-react";
+import { Mail, Linkedin, Github, MapPin } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const Contact = () => {
@@ -13,13 +13,6 @@ const Contact = () => {
       value: "bharathithanikonda173@gmail.com",
       href: "mailto:bharathithanikonda173@gmail.com",
       primary: true
-    },
-    {
-      icon: Phone,
-      label: "Phone",
-      value: "(806) 317-3718",
-      href: "tel:+18063173718",
-      primary: false
     },
     {
       icon: MapPin,
@@ -61,18 +54,19 @@ const Contact = () => {
         >
           <div className="text-center mb-16">
             <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
-              <span className="gradient-text">Contact</span>
+              <span className="gradient-text animate-heading-glow">Contact</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Let's discuss opportunities, collaborations, or innovative projects
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Contact Information */}
-              <div className="space-y-6 animate-fade-in-left" style={{ animationDelay: '0.4s' }}>
-                <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Top Row - Get in Touch and Connect side by side */}
+            <div className="grid md:grid-cols-2 gap-12 mb-16">
+              {/* Left Side - Get in Touch */}
+              <div className="space-y-6 animate-fade-in-right" style={{ animationDelay: '0.4s' }}>
+                <h3 className="font-heading text-3xl font-semibold text-foreground mb-8 text-center md:text-left">
                   Get in Touch
                 </h3>
                 
@@ -112,9 +106,9 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Social Links & CTA */}
-              <div className="space-y-8 animate-fade-in-right" style={{ animationDelay: '0.6s' }}>
-                <h3 className="font-heading text-2xl font-semibold text-foreground mb-6">
+              {/* Right Side - Connect */}
+              <div className="space-y-6 animate-fade-in-left" style={{ animationDelay: '0.6s' }}>
+                <h3 className="font-heading text-3xl font-semibold text-foreground mb-8 text-center md:text-left">
                   Connect
                 </h3>
                 
@@ -148,24 +142,26 @@ const Contact = () => {
                     );
                   })}
                 </div>
+              </div>
+            </div>
 
-                {/* Call to Action */}
-                <div className="glass rounded-2xl p-8 shadow-medium text-center hover-lift animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
-                  <h4 className="font-heading text-xl font-semibold text-foreground mb-4">
-                    Ready to Collaborate?
-                  </h4>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    Let's discuss AI projects, software development opportunities, or innovative technology solutions.
-                  </p>
-                  <Button 
-                    size="lg"
-                    className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white shadow-medium px-8 py-3 rounded-xl"
-                    onClick={() => window.open('mailto:bharathithanikonda173@gmail.com', '_blank')}
-                  >
-                    <Mail className="w-5 h-5 mr-2" />
-                    Send Email
-                  </Button>
-                </div>
+            {/* Bottom Row - Ready to Collaborate centered */}
+            <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+              <div className="glass rounded-2xl p-10 shadow-medium text-center hover-lift max-w-3xl w-full">
+                <h4 className="font-heading text-2xl font-semibold text-foreground mb-6">
+                  Ready to Collaborate?
+                </h4>
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
+                  Let's discuss AI projects, software development opportunities, or innovative technology solutions.
+                </p>
+                <Button 
+                  size="lg"
+                  className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white shadow-medium px-10 py-4 rounded-xl text-lg"
+                  onClick={() => window.open('mailto:bharathithanikonda173@gmail.com', '_blank')}
+                >
+                  <Mail className="w-5 h-5 mr-3" />
+                  Send Email
+                </Button>
               </div>
             </div>
           </div>
