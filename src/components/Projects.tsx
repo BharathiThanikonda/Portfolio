@@ -19,11 +19,15 @@ interface GitHubRepo {
   updated_at: string;
 }
 
+// Define project categories
+type ProjectCategory = 'all' | 'web-development' | 'ai-ml' | 'cloud';
+
 const Projects = () => {
   const { ref, isVisible } = useScrollAnimation();
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<ProjectCategory>('all');
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -287,6 +291,41 @@ const Projects = () => {
     fetchRepos();
   }, []);
 
+  // Function to determine project category based on name and topics
+  const getProjectCategory = (repo: GitHubRepo): ProjectCategory => {
+    const name = repo.name.toLowerCase();
+    const topics = repo.topics?.map(t => t.toLowerCase()) || [];
+    
+    // AI/ML projects
+    if (name.includes('ai') || name.includes('ml') || name.includes('machine-learning') || 
+        name.includes('deep-learning') || name.includes('nlp') || name.includes('sentiment') ||
+        name.includes('trading') || name.includes('review') || name.includes('mcp') ||
+        topics.some(t => ['ai', 'ml', 'machine-learning', 'deep-learning', 'nlp', 'tensorflow', 'pytorch', 'keras'].includes(t))) {
+      return 'ai-ml';
+    }
+    
+    // Cloud projects
+    if (name.includes('aws') || name.includes('pipeline') || name.includes('cloud') ||
+        topics.some(t => ['aws', 'pipeline', 'cloud', 'athena', 's3'].includes(t))) {
+      return 'cloud';
+    }
+    
+    // Web development projects (default for most others)
+    return 'web-development';
+  };
+
+  // Filter projects based on active filter
+  const filteredRepos = repos.filter(repo => {
+    if (activeFilter === 'all') return true;
+    return getProjectCategory(repo) === activeFilter;
+  });
+
+  // Get count for each category
+  const getCategoryCount = (category: ProjectCategory) => {
+    if (category === 'all') return repos.length;
+    return repos.filter(repo => getProjectCategory(repo) === category).length;
+  };
+
   // Simple technology extraction - just show all topics directly
   const extractTechnologies = (repo: GitHubRepo) => {
     // For now, just return the language as a placeholder
@@ -381,6 +420,42 @@ const Projects = () => {
             )}
           </div>
 
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <Button
+              variant={activeFilter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveFilter('all')}
+              className="transition-all duration-300"
+            >
+              All Projects ({getCategoryCount('all')})
+            </Button>
+            <Button
+              variant={activeFilter === 'web-development' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveFilter('web-development')}
+              className="transition-all duration-300"
+            >
+              Web Development ({getCategoryCount('web-development')})
+            </Button>
+            <Button
+              variant={activeFilter === 'ai-ml' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveFilter('ai-ml')}
+              className="transition-all duration-300"
+            >
+              AI/ML ({getCategoryCount('ai-ml')})
+            </Button>
+            <Button
+              variant={activeFilter === 'cloud' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setActiveFilter('cloud')}
+              className="transition-all duration-300"
+            >
+              Cloud ({getCategoryCount('cloud')})
+            </Button>
+          </div>
+
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, index) => (
@@ -398,158 +473,100 @@ const Projects = () => {
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                             {repos.map((repo, index) => {
-                 return (
-                  <Card 
-                    key={`${repo.id}-${repo.name}`}
-                    className="glass rounded-2xl border-primary/20 shadow-medium hover-lift group h-full animate-fade-in-up"
-                    style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+            <>
+              {filteredRepos.length === 0 ? (
+                <div className="text-center py-12 animate-fade-in-up">
+                  <p className="text-muted-foreground text-lg">
+                    No projects found in the {activeFilter === 'all' ? 'selected' : activeFilter.replace('-', ' ')} category.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveFilter('all')}
+                    className="mt-4"
                   >
-                                         <CardHeader className="pb-4">
-                                               <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <CardTitle className="font-heading text-lg group-hover:text-primary transition-colors line-clamp-2">
-                              {repo.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                            </CardTitle>
+                    View All Projects
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredRepos.map((repo, index) => {
+                    const projectCategory = getProjectCategory(repo);
+                    
+                    return (
+                      <Card 
+                        key={`${repo.id}-${repo.name}`}
+                        className="glass rounded-2xl border-primary/20 shadow-medium hover-lift group h-full animate-fade-in-up"
+                        style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+                      >
+                        <CardHeader className="pb-4">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <CardTitle className="font-heading text-lg group-hover:text-primary transition-colors line-clamp-2">
+                                {repo.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                              </CardTitle>
+                            </div>
+                            
+                            {/* Project Category Badge - Top Right Corner */}
+                            <Badge 
+                              variant="secondary" 
+                              className={`px-3 py-1 text-xs font-medium ml-2 ${
+                                projectCategory === 'web-development' 
+                                  ? 'bg-blue-100 text-blue-800 border-blue-200'
+                                  : projectCategory === 'ai-ml'
+                                  ? 'bg-purple-100 text-purple-800 border-purple-200'
+                                  : 'bg-sky-100 text-sky-800 border-sky-200'
+                              }`}
+                            >
+                              {projectCategory === 'web-development' ? 'Web Development' :
+                               projectCategory === 'ai-ml' ? 'AI/ML' : 'Cloud'}
+                            </Badge>
                           </div>
                           
-                                                     {/* Project Category - Top Right Corner */}
-                           {(repo.name === "MovieDux" || repo.name === "moviedux" || repo.name === "Movie-Dux" || repo.name === "MovieDux APP" || repo.name === "moviedux-app") && (
-                             <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1 text-xs font-medium ml-2">
-                               Web Development
-                             </Badge>
-                           )}
-                           {(repo.name === "Automated-Review-Assistant" || repo.name === "automated-review-assistant" || repo.name === "Automated Review Assistant") && (
-                             <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 px-3 py-1 text-xs font-medium ml-2">
-                               AI/ML
-                             </Badge>
-                           )}
-                           {(repo.name === "AWS-Data-pipeline-creation" || repo.name === "aws-data-pipeline-creation" || repo.name === "AWS Data Pipeline Creation") && (
-                             <Badge variant="secondary" className="bg-sky-100 text-sky-800 border-sky-200 px-3 py-1 text-xs font-medium ml-2">
-                               Cloud
-                             </Badge>
-                           )}
-                           {(repo.name === "QuantitativeTradingAI" || repo.name === "quantitative-trading-ai" || repo.name === "Quantitative Trading AI") && (
-                             <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 px-3 py-1 text-xs font-medium ml-2">
-                               AI/ML
-                             </Badge>
-                           )}
-                           {(repo.name === "mcp-ai-agent" || repo.name === "MCP-AI-Agent" || repo.name === "MCP AI Agent") && (
-                             <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 px-3 py-1 text-xs font-medium ml-2">
-                               AI/ML
-                             </Badge>
-                           )}
-                           {(repo.name === "Analysis-of-twittter-sentiments-using-machine-learning-algorithms" || repo.name === "analysis-of-twittter-sentiments-using-machine-learning-algorithms" || repo.name === "Analysis of Twitter Sentiments using Machine Learning Algorithms") && (
-                             <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 px-3 py-1 text-xs font-medium ml-2">
-                               AI/ML
-                             </Badge>
-                           )}
-                           {(repo.name === "Chat App" || repo.name === "Chat-App" || repo.name === "ChatApp") && (
-                             <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1 text-xs font-medium ml-2">
-                               Web Development
-                             </Badge>
-                           )}
-                           {(repo.name === "Task-manager-app" || repo.name === "task-manager-app" || repo.name === "Task Manager App") && (
-                             <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1 text-xs font-medium ml-2">
-                               Web Development
-                             </Badge>
-                           )}
-                            {(repo.name === "Weather-App" || repo.name === "weather-app" || repo.name === "Weather App") && (
-                             <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1 text-xs font-medium ml-2">
-                               Web Development
-                             </Badge>
-                           )}
-                        </div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xs text-muted-foreground">
+                              Updated {formatDate(repo.updated_at)}
+                            </span>
+                          </div>
+                        </CardHeader>
                         
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-xs text-muted-foreground">
-                            Updated {formatDate(repo.updated_at)}
-                          </span>
-                        </div>
-                        
-                        
-                      </CardHeader>
-                      
-                     <CardContent className="pt-0">
-                                              <CardDescription className="text-muted-foreground mb-4 line-clamp-3">
-                          {repo.description || "A well-crafted project showcasing modern development practices and innovative solutions."}
-                        </CardDescription>
-                        
-                        
-                        
-                                                                          {/* Technologies Used */}
-                         {(repo.name === "MovieDux" || repo.name === "moviedux" || repo.name === "Movie-Dux" || repo.name === "MovieDux APP" || repo.name === "moviedux-app") && (
-                           <div className="mb-4">
-                             <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                               Technologies Used
-                             </h5>
-                             <div className="flex flex-wrap gap-2">
-                               <Badge variant="secondary" className="bg-cyan-600 text-white border-cyan-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                 ReactJS
-                               </Badge>
-                               <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                 JavaScript
-                               </Badge>
-                             </div>
-                           </div>
-                         )}
-                         
-                                                   {(repo.name === "Automated-Review-Assistant" || repo.name === "automated-review-assistant" || repo.name === "Automated Review Assistant") && (
-                            <div className="mb-4">
-                              <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                Technologies Used
-                              </h5>
-                              <div className="flex flex-wrap gap-2">
-                                <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                  Python
-                                </Badge>
-                                <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                  TensorFlow
-                                </Badge>
-                                <Badge variant="secondary" className="bg-blue-500 text-white border-blue-600 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                  Pandas
-                                </Badge>
-                                <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                  NumPy
-                                </Badge>
-                                <Badge variant="secondary" className="bg-red-600 text-white border-red-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                  PyTorch
-                                </Badge>
-                              </div>
-                            </div>
-                          )}
+                        <CardContent className="pt-0">
+                          <CardDescription className="text-muted-foreground mb-4">
+                            {repo.description || "A well-crafted project showcasing modern development practices and innovative solutions."}
+                          </CardDescription>
                           
-                                                     {(repo.name === "AWS-Data-pipeline-creation" || repo.name === "aws-data-pipeline-creation" || repo.name === "AWS Data Pipeline Creation") && (
-                             <div className="mb-4">
-                               <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                 Technologies Used
-                               </h5>
-                               <div className="flex flex-wrap gap-2">
-                                 <Badge variant="secondary" className="bg-sky-600 text-white border-sky-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                   Athena
-                                 </Badge>
-                                 <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                   S3
-                                 </Badge>
-                                 <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                   Python
-                                 </Badge>
-                               </div>
-                             </div>
-                           )}
-                           
-                                                       {(repo.name === "QuantitativeTradingAI" || repo.name === "quantitative-trading-ai" || repo.name === "Quantitative Trading AI") && (
-                              <div className="mb-4">
-                                <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                  Technologies Used
-                                </h5>
-                                <div className="flex flex-wrap gap-2">
+                          {/* Technologies Used - Dynamic based on project category */}
+                          <div className="mb-4">
+                            <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
+                              Technologies Used
+                            </h5>
+                            <div className="flex flex-wrap gap-2">
+                              {projectCategory === 'web-development' && (
+                                <>
+                                  <Badge variant="secondary" className="bg-cyan-600 text-white border-cyan-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    ReactJS
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    JavaScript
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Node.js
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    HTML
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-purple-600 text-white border-purple-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    CSS
+                                  </Badge>
+                                </>
+                              )}
+                              
+                              {projectCategory === 'ai-ml' && (
+                                <>
+                                  <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Python
+                                  </Badge>
                                   <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
                                     TensorFlow
-                                  </Badge>
-                                  <Badge variant="secondary" className="bg-red-600 text-white border-red-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                    Keras
                                   </Badge>
                                   <Badge variant="secondary" className="bg-blue-500 text-white border-blue-600 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
                                     Pandas
@@ -557,173 +574,65 @@ const Projects = () => {
                                   <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
                                     NumPy
                                   </Badge>
+                                  <Badge variant="secondary" className="bg-red-600 text-white border-red-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    PyTorch
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-purple-700 text-white border-purple-800 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    MCP
+                                  </Badge>
+                                </>
+                              )}
+                              
+                              {projectCategory === 'cloud' && (
+                                <>
+                                  <Badge variant="secondary" className="bg-sky-600 text-white border-sky-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    AWS
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    S3
+                                  </Badge>
                                   <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
                                     Python
                                   </Badge>
-                                  <Badge variant="secondary" className="bg-blue-300 text-white border-blue-400 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                    Matplotlib
+                                  <Badge variant="secondary" className="bg-indigo-600 text-white border-indigo-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Athena
                                   </Badge>
-                                </div>
-                              </div>
-                            )}
-                            
-                                                         {(repo.name === "mcp-ai-agent" || repo.name === "MCP-AI-Agent" || repo.name === "MCP AI Agent") && (
-                               <div className="mb-4">
-                                 <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                   Technologies Used
-                                 </h5>
-                                 <div className="flex flex-wrap gap-2">
-                                   <Badge variant="secondary" className="bg-purple-700 text-white border-purple-800 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     MCP
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     Python
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     LangChain
-                                   </Badge>
-                                 </div>
-                               </div>
-                             )}
-                             
-                             {(repo.name === "Analysis-of-twittter-sentiments-using-machine-learning-algorithms" || repo.name === "analysis-of-twittter-sentiments-using-machine-learning-algorithms" || repo.name === "Analysis of Twitter Sentiments using Machine Learning Algorithms") && (
-                               <div className="mb-4">
-                                 <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                   Technologies Used
-                                 </h5>
-                                 <div className="flex flex-wrap gap-2">
-                                   <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     Python
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-blue-500 text-white border-blue-600 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     Pandas
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     NumPy
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     TensorFlow
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-indigo-600 text-white border-indigo-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     TF-IDF
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-teal-600 text-white border-teal-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     NLTK
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-red-600 text-white border-red-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     PyTorch
-                                   </Badge>
-                                 </div>
-                               </div>
-                             )}
-                             
-                             {(repo.name === "Chat App" || repo.name === "Chat-App" || repo.name === "ChatApp") && (
-                               <div className="mb-4">
-                                 <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                   Technologies Used
-                                 </h5>
-                                 <div className="flex flex-wrap gap-2">
-                                   <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     Node.js
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     JavaScript
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     HTML
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-purple-600 text-white border-purple-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                     CSS
-                                   </Badge>
-                                   <Badge variant="secondary" className="bg-indigo-600 text-white border-indigo-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                    Socket.IO
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-slate-600 text-white border-slate-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                    SQL
-                                    </Badge>
-                                 </div>
-                               </div>
-                             )}
-                             {(repo.name === "Task-manager-app" || repo.name === "task-manager-app" || repo.name === "Task Manager App") && (
-                                <div className="mb-4">
-                                  <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                    Technologies Used
-                                  </h5>
-                                  <div className="flex flex-wrap gap-2">
-                                    <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      Node.js
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-green-700 text-white border-green-800 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      MongoDB
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      HTML
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-purple-600 text-white border-purple-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      CSS
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-green-700 text-white border-green-800 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      MailGrid
-                                    </Badge>
-                                  </div>
-                                </div>
+                                </>
                               )}
-                              {(repo.name === "Weather-App" || repo.name === "weather-app" || repo.name === "Weather App") && (
-                                <div className="mb-4">
-                                  <h5 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                                    Technologies Used
-                                  </h5>
-                                  <div className="flex flex-wrap gap-2">
-                                    <Badge variant="secondary" className="bg-orange-600 text-white border-orange-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      HTML
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-purple-600 text-white border-purple-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      CSS
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      Node.js
-                                    </Badge>
-                                    <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
-                                      JavaScript
-                                    </Badge>
-                                  </div>
-                                </div>
-                              )}
-                             
-                             {/* DEBUG: Show repository name to see what's being returned */}
-                          
-                       
-                                             
+                            </div>
+                          </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm" 
-                          variant="outline"
-                          className="flex-1 border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300"
-                          onClick={() => window.open(repo.html_url, '_blank')}
-                        >
-                          <Github className="w-4 h-4 mr-2" />
-                          Code
-                        </Button>
-                        
-                        {repo.homepage && (
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="flex-1 border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300"
-                            onClick={() => window.open(repo.homepage, '_blank')}
-                          >
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            Live
-                          </Button>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                          {/* Action Buttons */}
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm" 
+                              variant="outline"
+                              className="flex-1 border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300"
+                              onClick={() => window.open(repo.html_url, '_blank')}
+                            >
+                              <Github className="w-4 h-4 mr-2" />
+                              Code
+                            </Button>
+                            
+                            {repo.homepage && (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="flex-1 border-primary/30 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300"
+                                onClick={() => window.open(repo.homepage, '_blank')}
+                              >
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                Live
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
 
           {/* View More Button */}

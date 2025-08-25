@@ -109,7 +109,7 @@ const Certifications = () => {
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <CardTitle className="font-heading text-lg group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                      <CardTitle className="font-heading text-lg group-hover:text-primary transition-colors mb-2">
                         {cert.name}
                       </CardTitle>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -131,7 +131,7 @@ const Certifications = () => {
                 </CardHeader>
                 
                 <CardContent className="pt-0">
-                  <CardDescription className="text-muted-foreground mb-4 line-clamp-3">
+                  <CardDescription className="text-muted-foreground mb-4">
                     {cert.description}
                   </CardDescription>
                   

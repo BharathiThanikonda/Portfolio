@@ -238,6 +238,149 @@ All colors MUST be HSL.
   }
 }
 
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(5deg);
+  }
+}
+
+@keyframes spinSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+@keyframes particle1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.2);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(20px, 0) scale(0.8);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(10px, 10px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes particle2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translate(-15px, -5px) scale(1.3);
+    opacity: 1;
+  }
+  66% {
+    transform: translate(-5px, 15px) scale(0.7);
+    opacity: 0.3;
+  }
+}
+
+@keyframes particle3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(15px, -8px) scale(1.4);
+    opacity: 1;
+  }
+}
+
+@keyframes particle4 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(-8px, -12px) scale(1.1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-12px, 8px) scale(0.9);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(8px, 12px) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes underlineExpand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 @keyframes headingGlow {
   0%, 100% {
     text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
@@ -370,6 +513,59 @@ All colors MUST be HSL.
 
 .animate-text-slide-in {
   animation: textSlideIn 0.8s ease-out forwards;
+}
+
+.animate-typewriter {
+  animation: typewriter 2s steps(20) 0.5s forwards;
+  width: 0;
+}
+
+.animate-shine {
+  animation: shine 3s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 3s linear infinite;
+}
+
+.animate-grid-move {
+  animation: gridMove 20s linear infinite;
+}
+
+.animate-particle-1 {
+  animation: particle1 6s ease-in-out infinite;
+}
+
+.animate-particle-2 {
+  animation: particle2 8s ease-in-out infinite;
+}
+
+.animate-particle-3 {
+  animation: particle3 7s ease-in-out infinite;
+}
+
+.animate-particle-4 {
+  animation: particle4 9s ease-in-out infinite;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.animate-underline-expand {
+  animation: underlineExpand 1s ease-out forwards;
 }
 
 .animate-heading-glow {

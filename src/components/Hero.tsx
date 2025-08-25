@@ -20,6 +20,15 @@ const Hero = () => {
       {/* Background gradient effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5"></div>
       
+      {/* Animated background shapes */}
+      <div className="absolute top-20 left-20 w-32 h-32 bg-primary/5 rounded-full animate-float-slow"></div>
+      <div className="absolute top-40 right-32 w-24 h-24 bg-primary/10 rounded-full animate-float-slow" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute bottom-40 left-32 w-20 h-20 bg-primary/8 rounded-full animate-float-slow" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute bottom-20 right-20 w-28 h-28 bg-primary/6 rounded-full animate-float-slow" style={{ animationDelay: '1.5s' }}></div>
+      
+      {/* Animated grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px] animate-grid-move"></div>
+      
 
       
       <div className="container mx-auto px-6 relative z-10">
@@ -31,17 +40,49 @@ const Hero = () => {
         >
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="mb-8">
+            <div className="mb-8 relative">
+              {/* Animated greeting with sparkles */}
               <h2 className="text-2xl lg:text-3xl text-muted-foreground mb-2 animate-fade-in-up">
                 Hi, I'm
               </h2>
               <h1 className="font-heading text-5xl lg:text-6xl font-bold mb-2">
-                <span className="gradient-text animate-text-slide-in" style={{ animationDelay: '0.3s' }}>Bharathi Thanikonda</span>
+                <span 
+                  className="gradient-text relative inline-block animate-fade-in-up hover:scale-105 transition-transform duration-300 cursor-default group"
+                  style={{ animationDelay: '0.3s' }}
+                >
+                  <span className="animate-typewriter overflow-hidden whitespace-nowrap">
+                    Bharathi Thanikonda
+                  </span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shine"></span>
+                  
+                  {/* Floating particles around the name */}
+                  <span className="absolute -top-2 -left-2 w-2 h-2 bg-primary rounded-full animate-particle-1 opacity-60"></span>
+                  <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-primary rounded-full animate-particle-2 opacity-60"></span>
+                  <span className="absolute -bottom-1 -left-1 w-1 h-1 bg-primary rounded-full animate-particle-3 opacity-60"></span>
+                  <span className="absolute -bottom-2 -right-2 w-1.5 h-1.5 bg-primary rounded-full animate-particle-4 opacity-60"></span>
+                  
+                  {/* Glow effect on hover */}
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></span>
+                  
+                  {/* Sparkle stars around the name */}
+                  <span className="absolute -top-3 -left-3 text-primary animate-spin-slow text-lg">✨</span>
+                  <span className="absolute -top-2 -right-2 text-primary animate-spin-slow text-lg" style={{ animationDelay: '0.5s' }}>✨</span>
+                  <span className="absolute -bottom-2 -left-2 text-primary animate-spin-slow text-lg" style={{ animationDelay: '1s' }}>✨</span>
+                  <span className="absolute -bottom-3 -right-3 text-primary animate-spin-slow text-lg" style={{ animationDelay: '1.5s' }}>✨</span>
+                </span>
               </h1>
             </div>
             
-            <h3 className="text-xl lg:text-2xl font-semibold text-foreground mb-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              AI Engineer | Software Developer
+            <h3 className="text-xl lg:text-2xl font-semibold text-foreground mb-6 animate-fade-in-up relative" style={{ animationDelay: '0.4s' }}>
+              <span className="relative inline-block">
+                <span className="inline-block animate-slide-in-left" style={{ animationDelay: '0.6s' }}>AI Engineer</span>
+                <span className="mx-3 text-primary animate-pulse">|</span>
+                <span className="inline-block animate-slide-in-right" style={{ animationDelay: '0.8s' }}>Software Developer</span>
+                
+                {/* Floating tech icons */}
+                <span className="absolute -top-2 -left-2 text-primary animate-float-slow text-sm">🤖</span>
+                <span className="absolute -top-2 -right-2 text-primary animate-float-slow text-sm" style={{ animationDelay: '0.5s' }}>💻</span>
+              </span>
             </h3>
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl lg:max-w-none animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
