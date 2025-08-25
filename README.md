@@ -1,73 +1,123 @@
-# Welcome to your Lovable project
+# Bharathi Portfolio
 
-## Project info
+A modern, responsive portfolio website built with React and TypeScript, showcasing skills in AI Engineering and Software Development.
 
-**URL**: https://lovable.dev/projects/9c984a38-d4c5-4c1d-a5be-477c7a4b8ca5
 
-## How can I edit this code?
+## 🛠️ Technologies Used
 
-There are several ways of editing your application.
+- **Frontend**: React 18 + TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Build Tool**: Vite
+- **Animations**: Custom CSS animations and scroll effects
+- **Icons**: Lucide React icons
+- **Deployment**: Netlify
 
-**Use Lovable**
+## 📁 Project Structure
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9c984a38-d4c5-4c1d-a5be-477c7a4b8ca5) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── Hero.tsx        # Landing section
+│   ├── About.tsx       # About section
+│   ├── Experience.tsx  # Work experience
+│   ├── Projects.tsx    # Project showcase with filters
+│   ├── Skills.tsx      # Skills and technologies
+│   ├── Certifications.tsx # Certifications
+│   ├── Contact.tsx     # Contact form
+│   └── Footer.tsx      # Footer with links
+├── contexts/           # React contexts (Theme)
+├── hooks/              # Custom React hooks
+├── pages/              # Page components
+└── assets/             # Images and static files
 ```
 
-**Edit a file directly in GitHub**
+## 🚀 Getting Started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Prerequisites
 
-**Use GitHub Codespaces**
+- Node.js (v16 or higher)
+- npm or bun package manager
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Installation
 
-## What technologies are used for this project?
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd Portfolio
+   ```
 
-This project is built with:
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+3. **Start development server**
+   ```bash
+   npm run dev
+   # or
+   bun run dev
+   ```
 
-## How can I deploy this project?
+4. **Open your browser**
+   Navigate to `http://localhost:5173`
 
-Simply open [Lovable](https://lovable.dev/projects/9c984a38-d4c5-4c1d-a5be-477c7a4b8ca5) and click on Share -> Publish.
+## 🏗️ Available Scripts
 
-## Can I connect a custom domain to my Lovable project?
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-Yes, you can!
+## 🎨 Customization
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Colors and Themes
+- Edit `src/index.css` for color variables and theme customization
+- Modify `tailwind.config.ts` for additional Tailwind configurations
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Content Updates
+- Update component files to modify text content
+- Replace images in `src/assets/` folder
+- Modify project data in `Projects.tsx`
+
+### Styling
+- Use Tailwind CSS classes for styling
+- Custom CSS animations in `src/index.css`
+- Component-specific styles in individual component files
+
+## 📱 Responsive Design
+
+The portfolio is fully responsive with:
+- Mobile-first approach
+- Breakpoints for tablet and desktop
+- Optimized layouts for all screen sizes
+- Touch-friendly interactions
+
+## 🚀 Deployment
+
+### Netlify (Recommended)
+
+1. **Build the project**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Netlify**
+   - Drag and drop the `dist` folder to Netlify
+   - Or connect your GitHub repository for automatic deployments
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
