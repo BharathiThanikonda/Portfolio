@@ -15,7 +15,7 @@ const allowedOrigins = [
   'https://bharathithanikonda.dev', // Your custom domain
   'https://www.bharathithanikonda.dev', // With www
   'https://bharathithanikondaportfolio.netlify.app', // Netlify URL as fallback
-  'https://your-app-name.railway.app' // Railway URL (optional)
+  'https://web-production-85af4f.up.railway.app' // Railway URL (optional)
 ];
 
 const corsOptions = {
