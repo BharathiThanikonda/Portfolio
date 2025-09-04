@@ -2,6 +2,9 @@
 
 A modern, responsive portfolio website built with React and TypeScript, showcasing skills in AI Engineering and Software Development.
 
+## 🌐 Live Demo
+
+**Visit my portfolio:** [https://bharathithanikonda.dev/](https://bharathithanikonda.dev/)
 
 ## 🛠️ Technologies Used
 
@@ -11,6 +14,7 @@ A modern, responsive portfolio website built with React and TypeScript, showcasi
 - **Animations**: Custom CSS animations and scroll effects
 - **Icons**: Lucide React icons
 - **Deployment**: Netlify
+- **Backend**: Railway (AI Chatbot with Gemini AI)
 
 ## 📁 Project Structure
 
