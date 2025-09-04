@@ -12,9 +12,10 @@ const PORT = process.env.PORT || 3001;
 const allowedOrigins = [
   'http://localhost:8080', // Development
   'http://localhost:3000', // Alternative dev port
-  'https://bharathithanikonda.dev', // Replace with your actual domain
-  'https://www.bharathithanikonda.dev',
-  'https://bharathithanikondaportfolio.netlify.app' // Netlify URL as fallback
+  'https://bharathithanikonda.dev', // Your custom domain
+  'https://www.bharathithanikonda.dev', // With www
+  'https://bharathithanikondaportfolio.netlify.app', // Netlify URL as fallback
+  'https://your-app-name.railway.app' // Railway URL (optional)
 ];
 
 const corsOptions = {
