@@ -300,7 +300,8 @@ const Projects = () => {
     if (name.includes('ai') || name.includes('ml') || name.includes('machine-learning') || 
         name.includes('deep-learning') || name.includes('nlp') || name.includes('sentiment') ||
         name.includes('trading') || name.includes('review') || name.includes('mcp') ||
-        topics.some(t => ['ai', 'ml', 'machine-learning', 'deep-learning', 'nlp', 'tensorflow', 'pytorch', 'keras'].includes(t))) {
+        name.includes('git-insights') ||
+        topics.some(t => ['ai', 'ml', 'machine-learning', 'deep-learning', 'nlp', 'tensorflow', 'pytorch', 'keras', 'langchain', 'gemini'].includes(t))) {
       return 'ai-ml';
     }
     
@@ -560,7 +561,33 @@ const Projects = () => {
                                 </>
                               )}
                               
-                              {projectCategory === 'ai-ml' && (
+                              {projectCategory === 'ai-ml' && repo.name.toLowerCase().includes('git-insights') && (
+                                <>
+                                  <Badge variant="secondary" className="bg-black text-white border-gray-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    NextJS
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-cyan-500 text-white border-cyan-600 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Tailwind CSS
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    NextAuth.js
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-green-600 text-white border-green-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Supabase
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-purple-600 text-white border-purple-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    LangChain
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-yellow-600 text-white border-yellow-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    Gemini API
+                                  </Badge>
+                                  <Badge variant="secondary" className="bg-gray-600 text-white border-gray-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
+                                    GitHub API
+                                  </Badge>
+                                </>
+                              )}
+                              
+                              {projectCategory === 'ai-ml' && !repo.name.toLowerCase().includes('git-insights') && (
                                 <>
                                   <Badge variant="secondary" className="bg-blue-600 text-white border-blue-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
                                     Python
