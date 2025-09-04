@@ -118,10 +118,15 @@ const CustomChatbot = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -133,13 +138,30 @@ const CustomChatbot = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Chat error:', error);
-      const errorMessage: Message = {
+      
+      let errorMessage = "I'm sorry, I'm having trouble connecting right now. Please try again later or check my portfolio directly for information.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('rate limit') || error.message.includes('429')) {
+          errorMessage = "I'm receiving too many requests right now. Please wait a moment and try again.";
+        } else if (error.message.includes('timeout') || error.message.includes('408')) {
+          errorMessage = "The request is taking too long. Please try again.";
+        } else if (error.message.includes('API key') || error.message.includes('401')) {
+          errorMessage = "There's an API key issue. Please check your Gemini API configuration.";
+        } else if (error.message.includes('model') || error.message.includes('400')) {
+          errorMessage = "There's a technical issue. Please try again later.";
+        } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          errorMessage = "I can't connect to the server right now. Please check your internet connection and try again.";
+        }
+      }
+      
+      const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I'm sorry, I'm having trouble connecting right now. Please try again later or check my portfolio directly for information.",
+        text: errorMessage,
         sender: 'bot',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, botMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -159,6 +181,29 @@ const CustomChatbot = () => {
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Function to make contact details clickable
+  const makeLinksClickable = (text: string) => {
+    // Make email addresses clickable
+    let result = text.replace(
+      /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+      '<a href="mailto:$1" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+    
+    // Make LinkedIn mentions clickable
+    result = result.replace(
+      /\bLinkedIn\b/gi,
+      '<a href="https://www.linkedin.com/in/bharathi-thanikonda/" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>'
+    );
+    
+    // Make GitHub mentions clickable
+    result = result.replace(
+      /\bGitHub\b/gi,
+      '<a href="https://github.com/BharathiThanikonda" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">GitHub</a>'
+    );
+    
+    return result;
   };
 
   const handleChatToggle = () => {
@@ -205,9 +250,10 @@ const CustomChatbot = () => {
                   </div>
                   <div className="flex-1">
                                          <div className="bg-muted rounded-2xl px-4 py-2 mb-3">
-                       <p className="text-sm text-foreground">
-                         Hi! I'm Bharathi's AI assistant. Ask me anything about Bharathi's skills, projects, or experience!
-                       </p>
+                       <p 
+                         className="text-sm text-foreground"
+                         dangerouslySetInnerHTML={{ __html: makeLinksClickable("Hi! I'm Bharathi's AI assistant. Ask me anything about Bharathi's skills, projects, or experience!") }}
+                       />
                        <p className="text-xs opacity-70 mt-1">
                          {formatTime(new Date())}
                        </p>
@@ -313,7 +359,10 @@ const CustomChatbot = () => {
                           : 'bg-muted text-foreground'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      <p 
+                        className="text-sm whitespace-pre-wrap"
+                        dangerouslySetInnerHTML={{ __html: makeLinksClickable(message.text) }}
+                      />
                       <p className="text-xs opacity-70 mt-1">
                         {formatTime(message.timestamp)}
                       </p>
