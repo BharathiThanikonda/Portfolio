@@ -160,6 +160,14 @@ export default {
 					'50%': {
 						boxShadow: '0 0 30px rgba(139, 92, 246, 0.6)'
 					}
+				},
+				'spin-slow': {
+					from: {
+						transform: 'rotate(0deg)'
+					},
+					to: {
+						transform: 'rotate(360deg)'
+					}
 				}
 			},
 			animation: {
@@ -170,7 +178,8 @@ export default {
 				'fade-in-right': 'fade-in-right 0.6s ease-out',
 				'scale-in': 'scale-in 0.6s ease-out',
 				'float': 'float 3s ease-in-out infinite',
-				'glow': 'glow 2s ease-in-out infinite'
+				'glow': 'glow 2s ease-in-out infinite',
+				'spin-slow': 'spin-slow 3s linear infinite'
 			}
 		}
 	},
