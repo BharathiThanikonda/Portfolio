@@ -27,14 +27,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check for saved theme preference or default to dark
     const savedTheme = localStorage.getItem('theme') as Theme;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedTheme) {
       setTheme(savedTheme);
-    } else if (prefersDark) {
-      setTheme('dark');
     } else {
-      setTheme('light');
+      // Default to dark mode if no saved preference
+      setTheme('dark');
     }
   }, []);
 
