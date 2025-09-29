@@ -1,427 +1,295 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, MessageCircle, X, Bot, User, Sparkles, ChevronUp } from 'lucide-react';
-import { API_BASE_URL } from '@/config/api';
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Bot, X, Send, User as UserIcon } from "lucide-react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface Message {
-  id: string;
+  id: number;
   text: string;
-  sender: 'user' | 'bot';
-  timestamp: Date;
+  sender: "user" | "bot";
+  timestamp: string;
 }
 
 const CustomChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      text: "Hi! I'm Bharathi's AI assistant. Ask me anything about Bharathi's skills, projects, or experience!",
-      sender: 'bot',
-      timestamp: new Date()
-    }
+      id: 1,
+      text: "Hi! I'm Bharathi's AI assistant. Ask me anything!",
+      sender: "bot",
+      timestamp: new Date().toLocaleTimeString(),
+    },
   ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [portfolioContext, setPortfolioContext] = useState('');
-  const [showNotification, setShowNotification] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [ai, setAi] = useState<GoogleGenerativeAI | null>(null);
+  const [error, setError] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Extract portfolio content when component mounts
   useEffect(() => {
-    const extractPortfolioContent = () => {
-      const sections = [
-        'hero', 'about', 'experience', 'projects', 'skills', 'certifications', 'contact'
-      ];
-      
-      let content = '';
-      
-      sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-          content += section.textContent + ' ';
-        }
-      });
-      
-      // Also get content from specific elements
-      const projectCards = document.querySelectorAll('[data-project]');
-      projectCards.forEach(card => {
-        content += card.textContent + ' ';
-      });
-      
-      return content.trim();
-    };
-
-    // Wait for content to load
-    setTimeout(() => {
-      const content = extractPortfolioContent();
-      setPortfolioContext(content);
-    }, 1000);
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (apiKey) {
+      setAi(new GoogleGenerativeAI(apiKey));
+    }
   }, []);
 
-  // Show notification after 3 seconds of page load
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasInteracted) {
-        setShowNotification(true);
-      }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [hasInteracted]);
-
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Focus input when chat opens
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if (isOpen) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
-  }, [isOpen]);
+  }, [messages, isOpen]);
 
-  const sendMessage = async (text: string) => {
-    if (!text.trim() || isLoading) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: text.trim(),
-      sender: 'user',
-      timestamp: new Date()
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+    if (!ai) {
+      setError(
+        "Gemini API key is missing or invalid. Please set VITE_GEMINI_API_KEY."
+      );
+      return;
+    }
+    setError("");
+    const userMsg: Message = {
+      id: Date.now(),
+      text: input,
+      sender: "user",
+      timestamp: new Date().toLocaleTimeString(),
     };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsLoading(true);
+    // Include the new user message immediately for history
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
+    setInput("");
+    setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Static summary of skills for context
+      const portfolioContext = `Programming Languages: Python (Expert), Java (Advanced), JavaScript (Advanced), TypeScript (Advanced), C++ (Intermediate)
+AI & Machine Learning: PyTorch (Advanced), TensorFlow (Advanced), LangChain (Advanced), OpenAI (Advanced), Ollama (Intermediate)
+Web Development: HTML (Advanced), CSS (Advanced), React (Advanced), FastAPI (Advanced), Node.js (Advanced), Express.js (Advanced), Flask (Intermediate)
+Database Technologies: PostgreSQL (Advanced), MongoDB (Advanced), MySQL (Intermediate), SQLite (Intermediate), MSSQL (Intermediate), ChromaDB (Intermediate)
+Cloud & DevOps: AWS (Advanced), Docker (Intermediate), Git (Expert), GitHub (Expert), CI/CD (Intermediate)
+Data Analysis: Pandas (Advanced), NumPy (Advanced), Matplotlib (Advanced), Seaborn (Intermediate), Power BI (Intermediate), QuickSight (Intermediate)`;
+      // Static summary of professional experience for context
+      const experienceContext = `AI Engineer (Graduate Assistant) at Texas Tech University (May 2025 - Present): Developed AI-powered applications using FastAPI, integrated with LangChain, pgvector, and Hugging Face models to build domain-specific chatbots; Senior Software Engineer at HCL Software (Aug 2023 - July 2024): Developed and implemented Python scripts to integrate BigFix with ServiceNow, enhancing bidirectional data flow and automating workflows. Loaded and validated data from BigFix into MSSQL for advanced querying and analysis, enabling comprehensive vulnerability insights. Created ETL pipelines to ingest data from Tenable.io, Tenable.sc, and Qualys to generate remediation fixlets. Performed end-to-end testing using PyTest and unittest for functional, integration, and regression testing; System Development Engineer Intern at Amazon (Jan 2023 - June 2023): Automated S3 report uploads using Perl and analyzed CloudWatch and Lambda logs with JavaScript to generate insights. Designed SQL queries for Amazon RDS and Redshift to power AWS QuickSight dashboards. Migrated services using Java for improved security and scalability; Data Science Intern at Knowledge Solutions India (June 2021 - July 2021): Implemented a logistic regression model for heart disease prediction with data cleaning, normalization, and feature selection, achieving 95% accuracy.`;
+      // Static summary of resume highlights for context
+      const resumeContext = `Education:
+- M.S in Computer Science, Texas Tech University
+
+Certifications:
+- AWS Academy Graduate - AWS Academy Cloud Foundations (2022)
+- AWS Academy Graduate - AWS Academy Cloud Architecting (2022)
+- Google Data Analytics Professional Certificate (2025)
+
+Professional Summary:
+Skilled AI Engineer and Software Developer with expertise in building AI-powered applications, full-stack web development, and data analysis.`;
+      // Static summary of featured projects for context
+      const projectContext = `Weather App: Interactive weather application with real-time data; Automated Review Assistant: AI-powered content analysis system; MovieDux: Movie discovery app built with React; Quantitative Trading AI: Trading system using machine learning; Chat App: Real-time chat application with WebSocket support.`;
+      const model = ai.getGenerativeModel({
+        model: "gemini-2.5-flash",
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 512,
         },
-        body: JSON.stringify({
-          message: text,
-          context: portfolioContext,
-          conversationHistory: messages.slice(-5).map(msg => ({
-            role: msg.sender === 'user' ? 'user' : 'assistant',
-            content: msg.text
-          }))
-        }),
       });
+      // Use last 5 messages for context, including the newly added user message
+      const history = updatedMessages
+        .slice(-5)
+        .map((m) => `${m.sender === "user" ? "User" : "Assistant"}: ${m.text}`)
+        .join("\n");
+      const prompt = `You are Bharathi's AI assistant for her portfolio website. You have comprehensive knowledge about her entire portfolio, including her resume, skills, professional experience, and projects. Use the following contexts where appropriate to answer questions accurately.
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+Skills Context:
+${portfolioContext}
+
+Experience Context:
+${experienceContext}
+
+Resume Context:
+${resumeContext}
+
+Projects Context:
+${projectContext}
+
+Bharathi's Contact Information:
+- Email: bharathithanikonda173@gmail.com
+- LinkedIn: https://www.linkedin.com/in/bharathi-thanikonda/
+- GitHub: https://github.com/BharathiThanikonda
+- Portfolio Website: https://bharathithanikonda.dev/
+
+Instructions:
+- Answer questions based on the portfolio context provided above.
+- Thoroughly search through her portfolio, GitHub, LinkedIn, and projects to provide all relevant details.
+- Be conversational, friendly, and professional.
+- If information is not available, say so politely.
+- Keep responses concise but informative.
+- Always refer to Bharathi in the third person as "she".
+- When asked for contact details, provide the email address, the LinkedIn URL, and the GitHub URL.
+- If the user asks anything not related to Bharathi's portfolio, respond: "I'm sorry, I can only answer questions about Bharathi's portfolio."
+- When the user asks about a specific professional experience, provide a clear and concise summary including the role title, company, location, period, description of responsibilities, and key technologies used, formatted in a readable way.
+- When asked about Bharathi's professional experience in general, list each role she held (with title, company, location), the time period for each, and a concise description of her responsibilities and key technologies used, matching exactly the sections from the portfolio.
+- Additionally, if the user asks about a particular role by name, provide a detailed breakdown of that specific experience with all relevant details.
+
+Current conversation history:
+${history}
+User: ${input}
+Assistant:`;
+      const result = await model.generateContent(prompt);
+      const response = await result.response.text();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: response,
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
+    } catch (err: unknown) {
+      // Try to provide a specific, actionable error message
+      type ErrShape = Partial<{
+        status: number;
+        code: string;
+        message: string;
+        response: { status?: number; data?: { error?: { status?: string } } };
+        toString: () => string;
+      }>;
+      const e = err as ErrShape;
+      let friendly = "Sorry, there was an error. Please try again.";
+      const rawMsg: string | undefined = e?.message ?? e?.toString?.();
+      const status: number | undefined = e?.status ?? e?.response?.status;
+      const code: string | undefined =
+        e?.code ?? e?.response?.data?.error?.status;
+
+      if (!import.meta.env.VITE_GEMINI_API_KEY) {
+        friendly =
+          "Gemini API key is missing. Set VITE_GEMINI_API_KEY in your .env and restart the server.";
+      } else if (
+        status === 401 ||
+        /api key|invalid key|unauthorized/i.test(rawMsg || "")
+      ) {
+        friendly =
+          "Your Gemini API key seems invalid or unauthorized. Rotate the key in Google AI Studio and update .env.";
+      } else if (
+        status === 403 ||
+        /permission|access denied|quota|billing/i.test(rawMsg || "")
+      ) {
+        friendly =
+          "Access denied or quota/billing issue with Gemini API. Check AI Studio permissions, quotas, and key settings.";
+      } else if (
+        status === 429 ||
+        /rate limit|quota exceeded/i.test(rawMsg || "")
+      ) {
+        friendly =
+          "You have hit a rate limit. Please wait a bit and try again.";
+      } else if (status === 400 && /safety|blocked/i.test(rawMsg || "")) {
+        friendly =
+          "The content was blocked by safety filters. Try rephrasing your question.";
       }
 
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: data.response,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      
-      let errorMessage = "I'm sorry, I'm having trouble connecting right now. Please try again later or check my portfolio directly for information.";
-      
-      if (error instanceof Error) {
-        if (error.message.includes('rate limit') || error.message.includes('429')) {
-          errorMessage = "I'm receiving too many requests right now. Please wait a moment and try again.";
-        } else if (error.message.includes('timeout') || error.message.includes('408')) {
-          errorMessage = "The request is taking too long. Please try again.";
-        } else if (error.message.includes('API key') || error.message.includes('401')) {
-          errorMessage = "There's an API key issue. Please check your Gemini API configuration.";
-        } else if (error.message.includes('model') || error.message.includes('400')) {
-          errorMessage = "There's a technical issue. Please try again later.";
-        } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-          errorMessage = "I can't connect to the server right now. Please check your internet connection and try again.";
-        }
-      }
-      
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: errorMessage,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
-    } finally {
-      setIsLoading(false);
+      console.error("Gemini API error:", { status, code, rawMsg, err });
+      setError(friendly);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: `🔧 ${friendly}`,
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendMessage(inputValue);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage(inputValue);
-    }
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  // Function to make contact details clickable
-  const makeLinksClickable = (text: string) => {
-    // Make email addresses clickable
-    let result = text.replace(
-      /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-      '<a href="mailto:$1" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">$1</a>'
-    );
-    
-    // Make LinkedIn mentions clickable
-    result = result.replace(
-      /\bLinkedIn\b/gi,
-      '<a href="https://www.linkedin.com/in/bharathi-thanikonda/" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">LinkedIn</a>'
-    );
-    
-    // Make GitHub mentions clickable
-    result = result.replace(
-      /\bGitHub\b/gi,
-      '<a href="https://github.com/BharathiThanikonda" class="text-primary hover:underline font-medium" target="_blank" rel="noopener noreferrer">GitHub</a>'
-    );
-    
-    return result;
-  };
-
-  const handleChatToggle = () => {
-    if (isMinimized) {
-      setIsMinimized(false);
-      setIsOpen(true);
-    } else {
-      setIsOpen(!isOpen);
-    }
-    setShowNotification(false);
-    setHasInteracted(true);
-  };
-
-  const handleMinimize = () => {
-    setIsMinimized(true);
-    setIsOpen(false);
+    setLoading(false);
   };
 
   return (
     <>
-      {/* Chat Toggle Button with Enhanced Visibility */}
       <div className="fixed bottom-6 right-6 z-50">
-        {/* Notification Bubble */}
-        {showNotification && !isOpen && (
-          <div className="absolute bottom-20 right-0 mb-2 animate-bounce">
-            <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg max-w-xs">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 animate-pulse" />
-                <span className="text-sm font-medium">Ask me anything about Bharathi!</span>
-              </div>
-              <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-primary"></div>
-            </div>
-          </div>
-        )}
-        
-        {/* Minimized Chat Bubble */}
-        {isMinimized && (
-          <div className="animate-in slide-in-from-bottom-4 duration-300">
-            <Card className="w-80 shadow-2xl border-2 border-primary/20 bg-card/95 backdrop-blur-sm">
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Bot className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                                         <div className="bg-muted rounded-2xl px-4 py-2 mb-3">
-                       <p 
-                         className="text-sm text-foreground"
-                         dangerouslySetInnerHTML={{ __html: makeLinksClickable("Hi! I'm Bharathi's AI assistant. Ask me anything about Bharathi's skills, projects, or experience!") }}
-                       />
-                       <p className="text-xs opacity-70 mt-1">
-                         {formatTime(new Date())}
-                       </p>
-                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Click to start chatting</span>
-                      <Button
-                        onClick={handleChatToggle}
-                        size="sm"
-                        className="h-8 px-3 bg-primary hover:bg-primary/90"
-                      >
-                        <ChevronUp className="h-4 w-4 mr-1" />
-                        Chat
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-        
-        {/* Main Chat Button (only when not minimized) */}
-        {!isMinimized && (
-          <Button
-            onClick={handleChatToggle}
-            className={`h-16 w-16 rounded-full shadow-2xl transition-all duration-500 ${
-              isOpen 
-                ? 'bg-destructive hover:bg-destructive/90' 
-                : 'bg-primary hover:bg-primary/90 animate-pulse hover:animate-none'
-            } relative overflow-hidden group`}
-            size="icon"
-          >
-            {/* Animated background effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/40 rounded-full animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            
-            {/* Icon */}
-            <div className="relative z-10">
-              {isOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
-            </div>
-            
-            {/* Pulse ring effect */}
-            {!isOpen && !hasInteracted && (
-              <div className="absolute inset-0 rounded-full border-2 border-primary/50 animate-ping"></div>
-            )}
-          </Button>
-        )}
+        <Button
+          onClick={() => setIsOpen(!isOpen)}
+          className="h-16 w-16 rounded-full shadow-xl"
+          size="icon"
+        >
+          {isOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
+        </Button>
       </div>
 
-      {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-28 right-6 z-40 w-96 h-[500px] shadow-2xl border-2 border-primary/20 bg-card/95 backdrop-blur-sm animate-in slide-in-from-bottom-4 duration-300">
-          <CardContent className="p-0 h-full flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border/50 bg-primary/5">
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <Bot className="h-5 w-5 text-primary" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                </div>
-                                 <h3 className="font-semibold text-foreground">Bharathi's AI Assistant</h3>
-              </div>
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleMinimize}
-                  className="h-8 w-8"
-                >
-                  <ChevronUp className="h-4 w-4 rotate-180" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                  className="h-8 w-8"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+        <div className="fixed bottom-28 right-6 z-40 w-96 max-w-full h-[500px] bg-white dark:bg-gray-900 border rounded-lg shadow-xl flex flex-col">
+          <div className="p-4 border-b flex items-center gap-2">
+            <Bot className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold">Bharathi's AI Assistant</h3>
+          </div>
 
-            {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-800">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`flex items-end gap-2 max-w-[80%] ${
+                    msg.sender === "user" ? "flex-row-reverse" : ""
+                  }`}
+                >
+                  <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    {msg.sender === "user" ? (
+                      <UserIcon className="h-4 w-4 text-blue-500" />
+                    ) : (
+                      <Bot className="h-4 w-4 text-primary" />
+                    )}
+                  </span>
                   <div
-                    key={message.id}
-                    className={`flex gap-3 ${
-                      message.sender === 'user' ? 'justify-end' : 'justify-start'
+                    className={`rounded-2xl px-4 py-2 text-sm ${
+                      msg.sender === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     }`}
                   >
-                    {message.sender === 'bot' && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-primary" />
-                      </div>
-                    )}
-                    
-                    <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                        message.sender === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-foreground'
-                      }`}
-                    >
-                      <p 
-                        className="text-sm whitespace-pre-wrap"
-                        dangerouslySetInnerHTML={{ __html: makeLinksClickable(message.text) }}
-                      />
-                      <p className="text-xs opacity-70 mt-1">
-                        {formatTime(message.timestamp)}
-                      </p>
-                    </div>
-
-                    {message.sender === 'user' && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <User className="h-4 w-4 text-primary" />
-                      </div>
-                    )}
+                    {msg.text}
                   </div>
-                ))}
-                
-                {isLoading && (
-                  <div className="flex gap-3 justify-start">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Bot className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="bg-muted rounded-2xl px-4 py-2">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  <span className="text-xs text-gray-400 mb-1">
+                    {msg.timestamp}
+                  </span>
+                </div>
               </div>
-              <div ref={messagesEndRef} />
-            </ScrollArea>
+            ))}
+            {loading && (
+              <div className="flex items-center gap-2 text-gray-400">
+                <Bot className="h-4 w-4 animate-bounce" /> Typing...
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
 
-            {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-border/50">
-              <div className="flex gap-2">
-                <Input
-                  ref={inputRef}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Ask me about Bharathi's skills, projects, or experience..."
-                  className="flex-1"
-                  disabled={isLoading}
-                />
-                <Button
-                  type="submit"
-                  size="icon"
-                  disabled={isLoading || !inputValue.trim()}
-                  className="h-10 w-10"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+          {error && (
+            <div className="text-red-500 text-xs px-4 pb-1">{error}</div>
+          )}
+
+          <div className="p-4 border-t flex gap-2 bg-background">
+            <Input
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                // debug: ensure value updates
+                // console.debug('chat input:', e.target.value);
+              }}
+              onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
+              placeholder="Ask about Bharathi..."
+              className="flex-1 text-gray-900 bg-white placeholder-gray-500 dark:text-white dark:bg-gray-800 dark:placeholder-gray-400"
+              autoFocus
+            />
+            <Button onClick={sendMessage} disabled={loading || !input.trim()}>
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       )}
     </>
   );
 };
 
 export default CustomChatbot;
-  

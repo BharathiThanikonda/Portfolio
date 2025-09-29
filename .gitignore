@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Environment and lock files (do not commit secrets or alternate lockfiles)
+.env
+bun.lockb
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
