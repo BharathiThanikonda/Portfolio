@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Linkedin, Github, Mail, Code2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import bharathiHeadshot from "@/assets/bharathi-headshot.jpg";
 
 const Hero = () => {
@@ -11,9 +12,6 @@ const Hero = () => {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const openResumeInNewTab = () => {
-    window.open('/resume.pdf', '_blank');
-  };
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
@@ -100,13 +98,14 @@ const Hero = () => {
               >
                 View My Work
               </Button>
-              <Button 
-                size="lg"
-                className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white text-base px-8 py-3 rounded-xl"
-                onClick={openResumeInNewTab}
-              >
-                📄 Resume
-              </Button>
+              <Link to="/resume" target="_blank" rel="noopener noreferrer">
+                <Button 
+                  size="lg"
+                  className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white text-base px-8 py-3 rounded-xl"
+                >
+                  📄 Resume
+                </Button>
+              </Link>
               <Button 
                 size="lg"
                 className="gradient-bg hover:shadow-lg hover:scale-105 transition-all duration-300 text-white text-base px-8 py-3 rounded-xl"
